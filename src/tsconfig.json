@@ -1,0 +1,59 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "es2017",
+        "declaration": true,
+        "removeComments": true,
+        "noLib": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "plugins": [
+            {
+                "transform": "@nativescript/webpack/transformers/ns-transform-native-classes",
+                "type": "raw"
+            }
+        ],
+        "lib": [
+            "es6",
+            "dom",
+            "es2017"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "~/*": [
+                "app/*"
+            ],
+            "*": [
+                "./node_modules/*"
+            ]
+        },
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "pretty": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "noEmitHelpers": true,
+        "noEmitOnError": false,
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noImplicitUseStrict": false,
+        "noFallthroughCasesInSwitch": true
+    },
+    "include": [
+        "*.ts",
+        "*.d.ts",
+        "**/*.ts",
+        "**/*.d.ts",
+    ],
+    "exclude": [
+        ".git",
+        ".vscode",
+        "dist",
+        "public",
+        "platforms",
+        "app/App_Resources",
+        "hooks"
+    ],
+    "compileOnSave": false
+}
