@@ -9,6 +9,7 @@
     "@nativescript/webpack": "3.0.0"
   },
   "devDependencies": {
+    "@nativescript/android": "7.0.1",
     "@nativescript/ios": "7.1.0",
     "typescript": "3.9.7"
   },

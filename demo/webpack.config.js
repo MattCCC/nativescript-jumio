@@ -64,8 +64,8 @@ module.exports = env => {
 
     let appFullPath = resolve(projectRoot, appPath);
     if (!fs.existsSync(appFullPath)) {
-      // some apps use 'app' directory
-      appFullPath = resolve(projectRoot, 'app');
+        // some apps use 'app' directory
+        appFullPath = resolve(projectRoot, 'app');
     }
     const hasRootLevelScopedModules = nsWebpack.hasRootLevelScopedModules({ projectDir: projectRoot });
     let coreModulesPackageName = "tns-core-modules";
@@ -268,18 +268,18 @@ module.exports = env => {
                 "process": "global.process",
             }),
             // Remove all files from the out dir.
-            new CleanWebpackPlugin({ 
-              cleanOnceBeforeBuildPatterns: itemsToClean,
-              verbose: !!verbose
+            new CleanWebpackPlugin({
+                cleanOnceBeforeBuildPatterns: itemsToClean,
+                verbose: !!verbose
             }),
             // Copy assets
             new CopyWebpackPlugin({
-              patterns: [
-                { from: 'assets/**', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
-                { from: 'fonts/**', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
-                { from: '**/*.jpg', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
-                { from: '**/*.png', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
-              ],
+                patterns: [
+                    { from: 'assets/**', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
+                    { from: 'fonts/**', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
+                    { from: '**/*.jpg', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
+                    { from: '**/*.png', noErrorOnMissing: true, globOptions: { dot: false, ...copyIgnore } },
+                ],
             }),
             new nsWebpack.GenerateNativeScriptEntryPointsPlugin("bundle"),
             // For instructions on how to set up workers with webpack
@@ -294,15 +294,15 @@ module.exports = env => {
             // https://github.com/TypeStrong/ts-loader/blob/ea2fcf925ec158d0a536d1e766adfec6567f5fb4/README.md#faster-builds
             // https://github.com/TypeStrong/ts-loader/blob/ea2fcf925ec158d0a536d1e766adfec6567f5fb4/README.md#hot-module-replacement
             new ForkTsCheckerWebpackPlugin({
-              async: false,
-              typescript: {
-                configFile: tsConfigPath,
-                memoryLimit: 4096,
-                diagnosticOptions: {
-                  syntactic: true,
-                  semantic: true
+                async: false,
+                typescript: {
+                    configFile: tsConfigPath,
+                    memoryLimit: 4096,
+                    diagnosticOptions: {
+                        syntactic: true,
+                        semantic: true
+                    }
                 }
-              }
             })
         ],
     };

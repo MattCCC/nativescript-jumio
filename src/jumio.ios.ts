@@ -1,5 +1,6 @@
 import { Common, Utils } from './jumio.common';
 import { Frame } from '@nativescript/core/ui/frame';
+
 declare class WeakRef<T> {
     constructor(obj: T);
     get(): T;
