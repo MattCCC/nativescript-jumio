@@ -16,6 +16,8 @@
 	"scripts": {
 		"tsc": "ts-patch install && ts-patch check && tsc -skipLibCheck",
 		"build": "npm i && npm run tsc && npm run build.native",
+		"pack": "cd ../publish; chmod +rx pack.sh; ./pack.sh",
+		"publish": "cd ../publish; chmod +rx publish.sh; ./publish.sh",
 		"build.native": "node scripts/build-native.js",
 		"tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
 		"ci.tslint": "npm i && ts-patch install && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
