@@ -30,36 +30,44 @@ npm install nativescript-jumio
 import { Jumio } from 'nativescript-jumio';
 
 try {
-    new Jumio({
+    const jumio = new Jumio({
         merchantApiToken: 'YOUR_API_TOKEN',
         merchantApiSecret: 'YOUR_API_SECRET',
+        datacenter: 'EU | US | SG',
+        allowOnRootedDevices: true | false
+    });
+
+    jumio.init({
         customerId: 'customerId',
-        cancelWithError: (_error: NetverifyError) => {
+        preSelectedData: {
+            country: 'Alpha2 Country Code',
+            documentTypes: 'passport | identitycard | driverlicense | visa',
+        },
+        cancelWithError: (error) => {
             // User cancelled after error
         },
-        finishInitWithError: (_error: NetverifyError) => {
+        finishInitWithError: (error) => {
             // Finished initialization with an error
         },
-        finishedScan: (documentData: NetverifyDocumentDataExtended, _scanReference: string) => {
+        finishedScan: (documentData, scanReference) => {
             // Scan is successful
-        }
+        },
     });
 } catch (err) {
     console.log("EXCEPTION", err)
 }
 
 ```
-## TODO
-* Plugin works on iOS only currently.
-* Integration with Android is required. Native Android objects are exposed, and can be used however they still need to be exposed for easier integration.
-
 ## API
 
 | Property | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | merchantApiToken | string | yes |  | API token |
 | merchantApiSecret | string | yes |  | API secret |
-| customerId | string |  |  | Customer ID |
+| datacenter | string | yes | | Data Center to use
+| allowOnRootedDevices | boolean | no | false | Whether to allow running the SDK on rooted devices
+| customerId | string | yes | | Customer ID
+| preSelectedData | Object | No | null | Pre-selected country as alpha2 code and document type
 | cancelWithError | funct |  |  | Callback triggered when User cancels. It accepts error object with code and message. |
 | finishInitWithError | funct |  |  | Callback triggered when initialization fails. It accepts error object with code and message. |
 | finishedScan | funct |  |  | Callback triggered when scan is finished. It contains an extended Document Data with all necessary information about processing results. |

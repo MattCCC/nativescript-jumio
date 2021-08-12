@@ -1,127 +1,181 @@
-import { Common, Utils } from './jumio.common';
-/*
-type PlatformNotSupportedException = any;
-type NullPointerException = any;
+import { Common, Utils, InitArgs, OnResultCallbacks } from './jumio.common';
+import { Application } from '@nativescript/core';
+import { AndroidActivityResultEventData } from '@nativescript/core/application/application-interfaces';
 
-@Interfaces([com.jumio.nv.NetverifySDK])
-class NetverifySDK extends java.lang.Object {
-    constructor() {
-        super();
-        this.initializeNetverifySDK();
-    }
+interface JumioError {
+    code: string;
+    message: string;
+};
 
-    private initializeNetverifySDK() {
-        let netverifySDK;
+export class Jumio extends Common {
+    private netverifySDK: com.jumio.nv.NetverifySDK;
+    private androidActivity: android.app.Activity;
+
+    constructor({ merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices }) {
+        super(merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices);
+
+        this.androidActivity = Application.android.foregroundActivity;
 
         try {
-            // You can get the current SDK version using the method below.
-            //			NetverifySDK.getSDKVersion();
-
-            // Call the method isSupportedPlatform to check if the device is supported.
-            if (!NetverifySDK.isSupportedPlatform(getActivity()))
-                Utils.error("Device not supported");
-
-            // Applications implementing the SDK shall not run on rooted devices. Use either the below
-            // method or a self-devised check to prevent usage of SDK scanning functionality on rooted
-            // devices.
-            if (NetverifySDK.isRooted(getActivity()))
-                Utils.error("Device is rooted");
-
-            // To create an instance of the SDK, perform the following call as soon as your activity is initialized.
-            // Make sure that your merchant API token and API secret are correct and specify an instance
-            // of your activity. If your merchant account is created in the EU data center, use
-            // JumioDataCenter.EU instead.
-            netverifySDK = NetverifySDK.create(getActivity(), apiToken, apiSecret, dataCenter);
-
-            // Use the following method to create an instance of the SDK, using offline fastfill scanning.
-            //			try {
-            //				netverifySDK = NetverifySDK.create(getActivity(), "YOUROFFLINETOKEN", "YOURPREFERREDCOUNTRY");
-            //			} catch (SDKExpiredException e) {
-            //				e.printStackTrace();
-            //				Toast.makeText(getActivity().getApplicationContext(), "The offline SDK is expired", Toast.LENGTH_LONG).show();
-            //				return;
-            //			}
-
-            // Enable ID verification to receive a verification status and verified data positions (see Callback chapter).
-            // Note: Not possible for accounts configured as Fastfill only.
-            netverifySDK.setEnableVerification(switchVerification.isChecked());
-
-            // You can specify issuing country (ISO 3166-1 alpha-3 country code) and/or ID types and/or document variant to skip
-            // their selection during the scanning process.
-            // Use the following method to convert ISO 3166-1 alpha-2 into alpha-3 country code.
-            //			String alpha3 = IsoCountryConverter.convertToAlpha3("AT");
-            //			netverifySDK.setPreselectedCountry("AUT");
-            //			ArrayList<NVDocumentType> documentTypes = new ArrayList<>();
-            //			documentTypes.add(NVDocumentType.PASSPORT);
-            //			netverifySDK.setPreselectedDocumentTypes(documentTypes);
-            //			netverifySDK.setPreselectedDocumentVariant(NVDocumentVariant.PLASTIC);
-
-            // The customer internal reference allows you to identify the scan (max. 100 characters).
-            // Note: Must not contain sensitive data like PII (Personally Identifiable Information) or account login.
-            //			netverifySDK.setCustomerInternalReference("YOURSCANREFERENCE");
-
-            // Use the following property to identify the scan in your reports (max. 100 characters).
-            //			netverifySDK.setReportingCriteria("YOURREPORTINGCRITERIA");
-
-            // You can also set a user reference (max. 100 characters).
-            // Note: The user reference should not contain sensitive data like PII (Personally Identifiable Information) or account login.
-            //			netverifySDK.setUserReference("USERREFERENCE");
-
-            // Callback URL for the confirmation after the verification is completed. This setting overrides your Jumio merchant settings.
-            //			netverifySDK.setCallbackUrl("YOURCALLBACKURL");
-
-            // You can disable Identity Verification during the ID verification for a specific transaction.
-            netverifySDK.setEnableIdentityVerification(switchIdentitiyVerification.isChecked());
-
-            // Use the following method to disable eMRTD scanning.
-            //			netverifySDK.setEnableEMRTD(false);
-
-            // Use the following method to set the default camera position.
-            //			netverifySDK.setCameraPosition(JumioCameraPosition.FRONT);
-
-            // Use the following method to only support IDs where data can be extracted on mobile only.
-            //			netverifySDK.setDataExtractionOnMobileOnly(true);
-
-            // Use the following method to explicitly send debug-info to Jumio. (default: false)
-            // Only set this property to true if you are asked by our Jumio support personnel.
-            //			netverifySDK.sendDebugInfoToJumio(true);
-
-            // Use the following method to override the SDK theme that is defined in the Manifest with a custom Theme at runtime
-            //			netverifySDK.setCustomTheme(R.style.YOURCUSTOMTHEMEID);
-
-            // Set watchlist screening on transaction level. Enable to override the default search, or disable watchlist screening for this transaction.
-            //			netverifySDK.setWatchlistScreening(NVWatchlistScreening.ENABLED);
-
-            // Search profile for watchlist screening.
-            //			netverifySDK.setWatchlistSearchProfile("YOURPROFILENAME");
-
-            // Use the following method to initialize the SDK before displaying it
-            //			netverifySDK.initiate(new NetverifyInitiateCallback() {
-            //				@Override
-            //				public void onNetverifyInitiateSuccess() {
-            //				}
-            //				@Override
-            //				public void onNetverifyInitiateError(String errorCode, String errorMessage, boolean retryPossible) {
-            //				}
-            //			});
-
-        } catch (e: PlatformNotSupportedException | NullPointerException) {
-            Utils.error("Error in initializeNetverifySDK: ", e);
-            if (getActivity() != null) {
-                Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-            netverifySDK = null;
+            this.netverifySDK = com.jumio.nv.NetverifySDK.create(this.androidActivity, merchantApiToken, merchantApiSecret, this.mapDataCenter(datacenter));
+            this.netverifySDK.setEnableVerification(true);
+            this.netverifySDK.setEnableIdentityVerification(true);
+        } catch (e) {
+            Utils.error(e);
+            this.cleanupSDK();
         }
     }
-}
-*/
-export class Jumio extends Common {
-    constructor(merchantApiToken: string, merchantApiSecret: string, datacentre: string) {
-        super(merchantApiToken, merchantApiSecret, datacentre);
 
-        setTimeout(() => {
-            // Utils.log('Jumio obj', Object.keys(com.jumio));
-        }, 200);
+    public init({
+        customerId,
+        preSelectedData = null,
+        cancelWithError = null,
+        finishInitWithError = null,
+        finishedScan = null
+    }: InitArgs<JumioError, com.jumio.nv.NetverifyDocumentData>): void {
+        this.netverifySDK.setCustomerInternalReference(customerId);
+
+        if (preSelectedData) {
+            const { documentType, country } = preSelectedData;
+
+            this.netverifySDK.setPreselectedCountry(com.jumio.nv.IsoCountryConverter.convertToAlpha3(country));
+            this.netverifySDK.setPreselectedDocumentVariant(com.jumio.nv.data.document.NVDocumentVariant.PLASTIC);
+
+            const preSelectedDocTypes = new java.util.ArrayList<com.jumio.nv.data.document.NVDocumentType>();
+            preSelectedDocTypes.add(this.mapDocumentType(documentType));
+
+            this.netverifySDK.setPreselectedDocumentTypes(preSelectedDocTypes);
+        }
+
+        this.netverifySDK.initiate(new com.jumio.nv.NetverifyInitiateCallback({
+            onNetverifyInitiateSuccess: () => {
+                if (!com.jumio.nv.NetverifySDK.isSupportedPlatform(this.androidActivity)) {
+                    const errorMsg = 'Platform not supported';
+
+                    Utils.error(errorMsg);
+                    finishInitWithError({ message: errorMsg, code: null });
+                    this.cleanupSDK();
+                }
+
+                if (!this.allowOnRootedDevices && com.jumio.nv.NetverifySDK.isRooted(this.androidActivity)) {
+                    const errorMsg = 'Device is rooted';
+
+                    Utils.error(errorMsg);
+                    finishInitWithError({ message: errorMsg, code: null });
+                    this.cleanupSDK();
+                }
+
+                Application.android.on('activityResult', (event) => this.onActivityResult(event, { cancelWithError, finishedScan }));
+                this.netverifySDK.start();
+            },
+            onNetverifyInitiateError: (code: string, message: string) => {
+                finishInitWithError({ code, message });
+            }
+        }));
+    }
+
+    private onActivityResult(
+        { requestCode, resultCode, intent }: Partial<AndroidActivityResultEventData>,
+        { finishedScan, cancelWithError }: OnResultCallbacks<JumioError, com.jumio.nv.NetverifyDocumentData>
+    ): void {
+        if (requestCode === com.jumio.nv.NetverifySDK.REQUEST_CODE) {
+            if (resultCode === android.app.Activity.RESULT_OK) {
+                const scanReference = intent.getParcelableExtra(com.jumio.nv.NetverifySDK.EXTRA_SCAN_REFERENCE) as string;
+                const intentData = intent.getParcelableExtra(com.jumio.nv.NetverifySDK.EXTRA_SCAN_DATA) as com.jumio.nv.NetverifyDocumentData;
+
+                let documentData = {} as Partial<com.jumio.nv.NetverifyDocumentData>;
+
+                for (const prop in intentData) {
+                    if (prop.startsWith('get')) {
+                        try {
+                            const processedKey = prop[3].toLowerCase() + prop.slice(4, prop.length);
+
+                            documentData = {
+                                ...documentData,
+                                [processedKey]: intentData[prop]()
+                            };
+                        } catch (e) {
+                            Utils.error(e);
+                        }
+                    }
+                }
+
+                const {
+                    issuingCountry,
+                    selectedCountry,
+                    gender
+                } = documentData;
+
+                finishedScan({
+                    ...documentData,
+                    issuingCountry: com.jumio.nv.IsoCountryConverter.convertToAlpha2(issuingCountry),
+                    selectedCountry: com.jumio.nv.IsoCountryConverter.convertToAlpha2(selectedCountry),
+                    genderStr: this.getGender(gender)
+                }, scanReference);
+            } else if (resultCode === android.app.Activity.RESULT_CANCELED) {
+                const errorMessage = intent.getParcelableExtra(com.jumio.nv.NetverifySDK.EXTRA_ERROR_MESSAGE) as string;
+                const errorCode = intent.getParcelableExtra(com.jumio.nv.NetverifySDK.EXTRA_ERROR_CODE) as string;
+
+                cancelWithError({ code: errorCode, message: errorMessage });
+            }
+
+            Application.android.off('activityResult', this.onActivityResult);
+            this.cleanupSDK();
+        }
+    }
+
+    private cleanupSDK() {
+        if (this.netverifySDK) {
+            this.netverifySDK.destroy();
+            this.netverifySDK = null;
+        }
+    }
+
+    private getGender(gender: com.jumio.nv.enums.NVGender) {
+        const genderType = com.jumio.nv.enums.NVGender;
+
+        switch (gender) {
+            case genderType.F:
+                return "Female";
+            case genderType.M:
+                return "Male";
+            case genderType.X:
+                return "Unspecified";
+            default:
+                return "Unknown";
+      }
+    }
+
+    private mapDocumentType(documentType: string): com.jumio.nv.data.document.NVDocumentType {
+        // Need the console log, otherwise the Android marshalling malfunctions. Will break if removed
+        console.log(com.jumio.nv.data.document);
+
+        const docTypes = com.jumio.nv.data.document.NVDocumentType;
+
+        switch (documentType.toLowerCase()) {
+            case 'identitycard':
+                return docTypes.IDENTITY_CARD;
+            case 'passport':
+                return docTypes.PASSPORT;
+            case 'driverlicense':
+                return docTypes.DRIVER_LICENSE;
+            case 'visa':
+                return docTypes.VISA;
+            default:
+                return docTypes.IDENTITY_CARD;
+        }
+    }
+
+    private mapDataCenter(datacenter: string): com.jumio.core.enums.JumioDataCenter {
+        switch(datacenter.toUpperCase()) {
+            case 'EU':
+                return com.jumio.core.enums.JumioDataCenter.EU;
+            case 'US':
+                return com.jumio.core.enums.JumioDataCenter.US;
+            case 'SG':
+                return com.jumio.core.enums.JumioDataCenter.SG;
+            default:
+                return com.jumio.core.enums.JumioDataCenter.EU;
+        }
     }
 }
