@@ -6,7 +6,8 @@
     "@nativescript/theme": "~2.3.0",
     "nativescript-jumio": "file:../src",
     "@nativescript/core": "7.0.0",
-    "@nativescript/webpack": "3.0.0"
+    "@nativescript/webpack": "3.0.0",
+    "@nativescript-community/perms": "2.1.5"
   },
   "devDependencies": {
     "@nativescript/android": "7.0.1",

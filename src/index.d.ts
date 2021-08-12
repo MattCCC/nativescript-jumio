@@ -1,12 +1,9 @@
-import { Common } from '../jumio.common';
-export declare class Jumio extends Common {
-  public constructor(params: Record<string, any>);
+import { Common } from './jumio.common';
+declare class Jumio extends Common {
+    constructor(params: Record<string, any>);
+    init(params: Record<string, any>): void;
 }
 
-// declare com {
-//   namespace jumio {
-//     interface nv {
-//       [k: any]: any;
-//     }
-//   }
-// }
+export {
+    Jumio
+};

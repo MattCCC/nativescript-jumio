@@ -1,4 +1,4 @@
-import { Common, Utils } from './jumio.common';
+import { Common, Utils, InitArgs, OnResultCallbacks } from './jumio.common';
 import { Frame } from '@nativescript/core/ui/frame';
 
 declare class WeakRef<T> {
@@ -8,21 +8,25 @@ declare class WeakRef<T> {
 }
 
 export class Jumio extends Common {
-    public cancelWithError = (_error: NetverifyError) => console.log('cancelWithError triggered');
     public finishInitWithError;
-    public finishedScan: (documentData: NetverifyDocumentDataExtended, scanReference: string) => void;
-    netverifyViewController: NetverifyViewController;
+    public finishedScan: OnResultCallbacks<NetverifyError, NetverifyDocumentDataExtended>['finishedScan'];
+    public cancelWithError: OnResultCallbacks<NetverifyError, NetverifyDocumentDataExtended>['cancelWithError'];
+    public netverifyViewController: NetverifyViewController;
 
     private delegate;
     private config: NetverifyConfiguration;
 
-    constructor({ merchantApiToken, merchantApiSecret, datacentre, customerId, cancelWithError = null, finishInitWithError = null, finishedScan = null }) {
-        super(merchantApiToken, merchantApiSecret, datacentre);
-
-        this.start({ merchantApiToken, merchantApiSecret, customerId, cancelWithError, finishInitWithError, finishedScan });
+    constructor({ merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices }) {
+        super(merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices);
     }
 
-    public start({ merchantApiToken, merchantApiSecret, customerId, cancelWithError = null, finishInitWithError = null, finishedScan = null }) {
+    public init({
+        customerId,
+        preSelectedData = null,
+        cancelWithError = null,
+        finishInitWithError = null,
+        finishedScan = null
+    }: InitArgs<NetverifyError, NetverifyDocumentDataExtended>) {
         this.cancelWithError = cancelWithError;
         this.finishInitWithError = finishInitWithError;
         this.finishedScan = finishedScan;
@@ -30,9 +34,16 @@ export class Jumio extends Common {
         let config = this.config;
         config = NetverifyConfiguration.new();
         config.enableVerification = true;
-        config.apiToken = merchantApiToken;
-        config.apiSecret = merchantApiSecret;
-        config.dataCenter = JumioDataCenter.EU;
+        config.apiToken = this.merchantApiToken;
+        config.apiSecret = this.merchantApiSecret;
+        config.dataCenter = this.mapDataCenter(this.datacenter);
+
+        if (preSelectedData) {
+            const { country, documentType } = preSelectedData;
+            config.preselectedCountry = ISOCountryConverter.convertToAlpha3(country);
+            config.preselectedDocumentTypes = this.mapDocumentType(documentType);
+            config.preselectedDocumentVariant = NetverifyDocumentVariant.Plastic;
+        }
 
         this.delegate = NsjumiopluginDelegateImpl.createWithOwnerResultCallback(
             new WeakRef(this),
@@ -92,6 +103,34 @@ export class Jumio extends Common {
         return null;
     }
 
+    private mapDocumentType(documentType: string): NetverifyDocumentType {
+        switch (documentType.toUpperCase()) {
+            case 'IDENTITYCARD':
+                return NetverifyDocumentType.IdentityCard;
+            case 'PASSPORT':
+                return NetverifyDocumentType.Passport;
+            case 'DRIVERLICENSE':
+                return NetverifyDocumentType.DriverLicense;
+            case 'VISA':
+                return NetverifyDocumentType.Visa;
+            default:
+                return NetverifyDocumentType.IdentityCard;
+        }
+    }
+
+    private mapDataCenter(datacenter: string): JumioDataCenter {
+        switch(datacenter.toUpperCase()) {
+            case 'EU':
+                return JumioDataCenter.EU;
+            case 'US':
+                return JumioDataCenter.US;
+            case 'SG':
+                return JumioDataCenter.SG;
+            default:
+                return JumioDataCenter.EU;
+        }
+    }
+
 }
 @NativeClass()
 @ObjCClass(NetverifyViewControllerDelegate)
@@ -145,52 +184,36 @@ class NsjumiopluginDelegateImpl extends NSObject implements NetverifyViewControl
     netverifyViewControllerDidFinishWithDocumentDataScanReference(netverifyViewController: NetverifyViewController, documentData: NetverifyDocumentData, scanReference: string): void {
         Utils.log("Good with scan reference: %@", scanReference);
 
-        const gender = documentData.gender;
-        let genderStr = '';
+        const {
+            gender,
+            selectedCountry,
+            issuingCountry
+        } = documentData;
 
-        switch (gender) {
-            case NetverifyGender.F:
-                genderStr = "Female";
-                break;
-            case NetverifyGender.M:
-                genderStr = "Male";
-                break;
-            case NetverifyGender.X:
-                genderStr = "Unspecified";
-                break;
-            case NetverifyGender.Unknown:
-            default:
-                genderStr = "Unknown";
-                break;
-        }
-
-        const selectedDocumentType = documentData.selectedDocumentType;
-        let documentTypeStr = '';
-
-        switch (selectedDocumentType) {
-            case NetverifyDocumentType.DriverLicense:
-                documentTypeStr = "DL";
-                break;
-            case NetverifyDocumentType.IdentityCard:
-                documentTypeStr = "ID";
-                break;
-            case NetverifyDocumentType.Passport:
-                documentTypeStr = "PP";
-                break;
-            case NetverifyDocumentType.Visa:
-                documentTypeStr = "Visa";
-                break;
-            default:
-                break;
-        }
+        const genderStr = this.getGender(gender);
 
         this._callback(netverifyViewController, {
             ...documentData,
+            issuingCountry: ISOCountryConverter.convertToAlpha2(issuingCountry),
+            selectedCountry: ISOCountryConverter.convertToAlpha2(selectedCountry),
             genderStr,
-            documentTypeStr,
         } as NetverifyDocumentDataExtended, scanReference);
 
         this._vc.dismissViewControllerAnimatedCompletion(true, null);
         this._owner.get().netverifyViewController.destroy();
+    }
+
+    private getGender(gender: NetverifyGender) {
+        switch (gender) {
+            case NetverifyGender.F:
+                return "Female";
+            case NetverifyGender.M:
+                return "Male";
+            case NetverifyGender.X:
+                return "Unspecified";
+            case NetverifyGender.Unknown:
+            default:
+                return "Unknown";
+      }
     }
 }

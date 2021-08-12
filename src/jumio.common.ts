@@ -1,16 +1,33 @@
 import { ContentView } from '@nativescript/core/ui/content-view';
 
-export class Common extends ContentView {
-  public merchantApiToken: string;
-  public merchantApiSecret: string;
-  public datacentre: string;
+interface PreSelectedData {
+  country: string;
+  documentType: string;
+}
+export interface OnResultCallbacks<Error, DocumentData> {
+  cancelWithError: (error: Error) => void;
+  finishedScan: (documentData: Partial<DocumentData> & { genderStr: string }, scanReference: string) => void;
+}
 
-  constructor(merchantApiToken: string, merchantApiSecret: string, datacentre: string) {
+export interface InitArgs<Error, DocumentData> extends OnResultCallbacks<Error, DocumentData> {
+  customerId: string;
+  preSelectedData: PreSelectedData;
+  finishInitWithError: (error: Error) => void;
+}
+
+export class Common extends ContentView {
+  protected merchantApiToken: string;
+  protected merchantApiSecret: string;
+  protected datacenter: string;
+  protected allowOnRootedDevices: boolean;
+
+  constructor(merchantApiToken: string, merchantApiSecret: string, datacenter: string, allowOnRootedDevices = false) {
     super();
 
     this.merchantApiToken = merchantApiToken;
     this.merchantApiSecret = merchantApiSecret;
-    this.datacentre = datacentre;
+    this.datacenter = datacenter;
+    this.allowOnRootedDevices = allowOnRootedDevices;
   }
 }
 
