@@ -11,8 +11,8 @@ export class Jumio extends Common {
     private netverifySDK: com.jumio.nv.NetverifySDK;
     private androidActivity: android.app.Activity;
 
-    constructor({ merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices }) {
-        super(merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices);
+    constructor({ merchantApiToken, merchantApiSecret, datacenter }) {
+        super(merchantApiToken, merchantApiSecret, datacenter);
 
         this.androidActivity = Application.android.foregroundActivity;
 
@@ -20,6 +20,15 @@ export class Jumio extends Common {
             this.netverifySDK = com.jumio.nv.NetverifySDK.create(this.androidActivity, merchantApiToken, merchantApiSecret, this.mapDataCenter(datacenter));
             this.netverifySDK.setEnableVerification(true);
             this.netverifySDK.setEnableIdentityVerification(true);
+
+            if (!com.jumio.nv.NetverifySDK.isSupportedPlatform(this.androidActivity)) {
+                Utils.error('Platform not supported');
+            }
+
+            if (com.jumio.nv.NetverifySDK.isRooted(this.androidActivity)) {
+                Utils.error('Device is rooted');
+            }
+
         } catch (e) {
             Utils.error(e);
             this.cleanupSDK();
@@ -49,22 +58,6 @@ export class Jumio extends Common {
 
         this.netverifySDK.initiate(new com.jumio.nv.NetverifyInitiateCallback({
             onNetverifyInitiateSuccess: () => {
-                if (!com.jumio.nv.NetverifySDK.isSupportedPlatform(this.androidActivity)) {
-                    const errorMsg = 'Platform not supported';
-
-                    Utils.error(errorMsg);
-                    finishInitWithError({ message: errorMsg, code: null });
-                    this.cleanupSDK();
-                }
-
-                if (!this.allowOnRootedDevices && com.jumio.nv.NetverifySDK.isRooted(this.androidActivity)) {
-                    const errorMsg = 'Device is rooted';
-
-                    Utils.error(errorMsg);
-                    finishInitWithError({ message: errorMsg, code: null });
-                    this.cleanupSDK();
-                }
-
                 Application.android.on('activityResult', (event) => this.onActivityResult(event, { cancelWithError, finishedScan }));
                 this.netverifySDK.start();
             },

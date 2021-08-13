@@ -19,15 +19,13 @@ export class Common extends ContentView {
   protected merchantApiToken: string;
   protected merchantApiSecret: string;
   protected datacenter: string;
-  protected allowOnRootedDevices: boolean;
 
-  constructor(merchantApiToken: string, merchantApiSecret: string, datacenter: string, allowOnRootedDevices = false) {
+  constructor(merchantApiToken: string, merchantApiSecret: string, datacenter: string) {
     super();
 
     this.merchantApiToken = merchantApiToken;
     this.merchantApiSecret = merchantApiSecret;
     this.datacenter = datacenter;
-    this.allowOnRootedDevices = allowOnRootedDevices;
   }
 }
 

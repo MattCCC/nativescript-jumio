@@ -34,7 +34,6 @@ try {
         merchantApiToken: 'YOUR_API_TOKEN',
         merchantApiSecret: 'YOUR_API_SECRET',
         datacenter: 'EU | US | SG',
-        allowOnRootedDevices: true | false
     });
 
     jumio.init({
@@ -65,7 +64,6 @@ try {
 | merchantApiToken | string | yes |  | API token |
 | merchantApiSecret | string | yes |  | API secret |
 | datacenter | string | yes | | Data Center to use
-| allowOnRootedDevices | boolean | no | false | Whether to allow running the SDK on rooted devices
 | customerId | string | yes | | Customer ID
 | preSelectedData | Object | No | null | Pre-selected country as alpha2 code and document type
 | cancelWithError | funct |  |  | Callback triggered when User cancels. It accepts error object with code and message. |

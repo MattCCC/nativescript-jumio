@@ -16,8 +16,8 @@ export class Jumio extends Common {
     private delegate;
     private config: NetverifyConfiguration;
 
-    constructor({ merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices }) {
-        super(merchantApiToken, merchantApiSecret, datacenter, allowOnRootedDevices);
+    constructor({ merchantApiToken, merchantApiSecret, datacenter }) {
+        super(merchantApiToken, merchantApiSecret, datacenter);
     }
 
     public init({
