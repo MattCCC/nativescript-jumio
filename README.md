@@ -26,6 +26,14 @@ npm install nativescript-jumio
 
 [nativescript-jumio](https://www.npmjs.com/package/nativescript-jumio)
 
+Make sure to include this activity inside the consumer's Android Manifest:
+
+<activity
+    android:theme="@style/Theme.Netverify"
+    android:hardwareAccelerated="true"
+    android:name="com.jumio.nv.NetverifyActivity"
+    android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
+
 ```javascript
 import { Jumio } from 'nativescript-jumio';
 
