@@ -5,8 +5,8 @@ interface PreSelectedData {
   documentType: string;
 }
 export interface OnResultCallbacks<Error, DocumentData> {
-  cancelWithError: (error: Error) => void;
-  finishedScan: (documentData: Partial<DocumentData> & { genderStr: string }, scanReference: string) => void;
+  cancelWithError: (error: Error, scanReference: string | null) => void;
+  finishedScan: (documentData: Partial<DocumentData> & { genderStr: string }, scanReference: string | null) => void;
 }
 
 export interface InitArgs<Error, DocumentData> extends OnResultCallbacks<Error, DocumentData> {
