@@ -15,7 +15,7 @@ export class HomeViewModel extends Observable {
             jumio.init({
                 preSelectedData: {
                     country: 'MT',
-                    documentType: 'identitycard',
+                    documentType: 'identity_card',
                 },
                 cancelWithError: (error) => console.log('cancelWithError triggered', error),
                 finishInitWithError: (error) => console.log('Error callback triggered', error),

@@ -105,11 +105,11 @@ export class Jumio extends Common {
 
     private mapDocumentType(documentType: string): NetverifyDocumentType {
         switch (documentType.toUpperCase()) {
-            case 'IDENTITYCARD':
+            case 'IDENTITY_CARD':
                 return NetverifyDocumentType.IdentityCard;
             case 'PASSPORT':
                 return NetverifyDocumentType.Passport;
-            case 'DRIVERLICENSE':
+            case 'DRIVER_LICENSE':
                 return NetverifyDocumentType.DriverLicense;
             case 'VISA':
                 return NetverifyDocumentType.Visa;
