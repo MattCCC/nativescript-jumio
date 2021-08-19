@@ -159,7 +159,7 @@ class NsjumiopluginDelegateImpl extends NSObject implements NetverifyViewControl
         }
 
         if (this._owner.get().cancelWithError) {
-            this._owner.get().cancelWithError(error);
+            this._owner.get().cancelWithError(error, scanReference);
         }
 
         this._vc.dismissViewControllerAnimatedCompletion(true, null);

@@ -72,8 +72,9 @@ export class Jumio extends Common {
         { finishedScan, cancelWithError }: OnResultCallbacks<JumioError, com.jumio.nv.NetverifyDocumentData>
     ): void {
         if (requestCode === com.jumio.nv.NetverifySDK.REQUEST_CODE) {
+            const scanReference = intent.getStringExtra(com.jumio.nv.NetverifySDK.EXTRA_SCAN_REFERENCE) as string;
+
             if (resultCode === android.app.Activity.RESULT_OK) {
-                const scanReference = intent.getStringExtra(com.jumio.nv.NetverifySDK.EXTRA_SCAN_REFERENCE) as string;
                 const intentData = intent.getParcelableExtra(com.jumio.nv.NetverifySDK.EXTRA_SCAN_DATA) as com.jumio.nv.NetverifyDocumentData;
 
                 let documentData = {} as Partial<com.jumio.nv.NetverifyDocumentData>;
@@ -109,7 +110,7 @@ export class Jumio extends Common {
                 const errorMessage = intent.getStringExtra(com.jumio.nv.NetverifySDK.EXTRA_ERROR_MESSAGE) as string;
                 const errorCode = intent.getStringExtra(com.jumio.nv.NetverifySDK.EXTRA_ERROR_CODE) as string;
 
-                cancelWithError({ code: errorCode, message: errorMessage });
+                cancelWithError({ code: errorCode, message: errorMessage }, scanReference);
             }
 
             Application.android.off('activityResult', this.onActivityResult);
