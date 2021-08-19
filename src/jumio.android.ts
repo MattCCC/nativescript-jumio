@@ -146,14 +146,14 @@ export class Jumio extends Common {
 
         const docTypes = com.jumio.nv.data.document.NVDocumentType;
 
-        switch (documentType.toLowerCase()) {
-            case 'identitycard':
+        switch (documentType.toUpperCase()) {
+            case 'IDENTITY_CARD':
                 return docTypes.IDENTITY_CARD;
-            case 'passport':
+            case 'PASSPORT':
                 return docTypes.PASSPORT;
-            case 'driverlicense':
+            case 'DRIVER_LICENSE':
                 return docTypes.DRIVER_LICENSE;
-            case 'visa':
+            case 'VISA':
                 return docTypes.VISA;
             default:
                 return docTypes.IDENTITY_CARD;

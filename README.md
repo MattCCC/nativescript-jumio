@@ -53,7 +53,7 @@ try {
         customerId: 'customerId',
         preSelectedData: {
             country: 'Alpha2 Country Code',
-            documentTypes: 'passport | identitycard | driverlicense | visa',
+            documentType: 'passport | identity_card | driver_license | visa',
         },
         cancelWithError: (error) => {
             // User cancelled after error
