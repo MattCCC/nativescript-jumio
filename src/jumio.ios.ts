@@ -67,6 +67,7 @@ export class Jumio extends Common {
                 });
         } catch (e) {
             Utils.error('EXCEPTION', e);
+            throw new Error(e);
         }
     }
 

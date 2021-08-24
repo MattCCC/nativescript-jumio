@@ -30,8 +30,9 @@ export class Jumio extends Common {
             }
 
         } catch (e) {
-            Utils.error(e);
             this.cleanupSDK();
+            Utils.error(e);
+            throw new Error(e);
         }
     }
 
