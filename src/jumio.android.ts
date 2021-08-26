@@ -10,6 +10,7 @@ interface JumioError {
 export class Jumio extends Common {
     private netverifySDK: com.jumio.nv.NetverifySDK;
     private androidActivity: android.app.Activity;
+    private onActivityResultCallback: (event: AndroidActivityResultEventData) => void;
 
     constructor({ merchantApiToken, merchantApiSecret, datacenter }) {
         super(merchantApiToken, merchantApiSecret, datacenter);
@@ -59,11 +60,13 @@ export class Jumio extends Common {
 
         this.netverifySDK.initiate(new com.jumio.nv.NetverifyInitiateCallback({
             onNetverifyInitiateSuccess: () => {
-                Application.android.on('activityResult', (event) => this.onActivityResult(event, { cancelWithError, finishedScan }));
+                this.onActivityResultCallback = (event) => this.onActivityResult(event, { cancelWithError, finishedScan });
+                Application.android.on('activityResult', this.onActivityResultCallback);
                 this.netverifySDK.start();
             },
             onNetverifyInitiateError: (code: string, message: string) => {
                 finishInitWithError({ code, message });
+                this.cleanupSDK();
             }
         }));
     }
@@ -114,7 +117,7 @@ export class Jumio extends Common {
                 cancelWithError({ code: errorCode, message: errorMessage }, scanReference);
             }
 
-            Application.android.off('activityResult', this.onActivityResult);
+            Application.android.off('activityResult', this.onActivityResultCallback);
             this.cleanupSDK();
         }
     }
