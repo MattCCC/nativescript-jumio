@@ -28,11 +28,13 @@ npm install nativescript-jumio
 
 Make sure to include this activity inside the consumer's Android Manifest:
 
+```
 <activity
     android:theme="@style/Theme.Netverify"
     android:hardwareAccelerated="true"
     android:name="com.jumio.nv.NetverifyActivity"
     android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
+```
 
 
 Ensure that Kotlin version is set to 1.4.30 inside gradle.properties file
