@@ -2,21 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 use_frameworks! # Required for proper framework handling
 platform :ios, '10.0'
-pod 'JumioMobileSDK', '~>3.9.3' # Use ID Verification, Authentication, Document Verification and BAM Checkout together in your app
-
-pod 'JumioMobileSDK/Netverify', '~>3.9.3' # Use full ID Verification and Authentication functionality
-pod 'JumioMobileSDK/NetverifyBase', '~>3.9.3' # For Fastfill, ID Verification basic functionality
-pod 'JumioMobileSDK/NetverifyNFC', '~>3.9.3' # For Fastfill, ID Verification functionality with NFC extraction
-pod 'JumioMobileSDK/NetverifyBarcode', '~>3.9.3' # For Fastfill, ID Verification functionality with barcode extraction
-pod 'JumioMobileSDK/NetverifyFace+iProov', '~>3.9.3' # For Fastfill, ID Verification functionality with Identity Verification, Authentication
-
-pod 'JumioMobileSDK/DocumentVerification', '~>3.9.3' # Use Document Verification functionality
-
-pod 'JumioMobileSDK/BAMCheckout', '~>3.9.2' # Use BAM Checkout functionality
-
-pod 'JumioMobileSDK/NetverifyBase', '~>3.9.3' # For Fastfill, ID Verification basic functionality
-
-pod 'JumioMobileSDK/NetverifyFace+iProov', '~>3.9.3' # For Fastfill, ID Verification functionality with Identity Verification, Authentication
+pod 'JumioMobileSDK', '~>3.8.0' # Use ID Verification, Authentication, Document Verification and BAM Checkout together in your app
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
