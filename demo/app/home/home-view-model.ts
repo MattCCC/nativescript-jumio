@@ -7,8 +7,8 @@ export class HomeViewModel extends Observable {
 
         try {
             const jumio = new Jumio({
-                merchantApiToken: 'MERCHANT_API_TOKEN',
-                merchantApiSecret: 'MERCHANT_API_SECRET',
+                merchantApiToken: "861178f1-04f9-4c93-9528-3e82550f42bd",
+                merchantApiSecret: "xGvTjrwkHMPOnxffvfx2rJvueoTbJ93t",
                 datacenter: 'eu',
             });
 

@@ -3,18 +3,18 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
+    "@nativescript-community/perms": "2.1.5",
+    "@nativescript/core": "~8.0.0",
     "@nativescript/theme": "~2.3.0",
-    "nativescript-jumio": "file:../src",
-    "@nativescript/core": "7.0.0",
-    "@nativescript/webpack": "3.0.0",
-    "@nativescript-community/perms": "2.1.5"
+    "nativescript-jumio": "file:../src"
   },
   "devDependencies": {
-    "@nativescript/android": "7.0.1",
-    "@nativescript/ios": "7.1.0",
-    "typescript": "3.9.7"
+    "@nativescript/android": "8.0.0",
+    "@nativescript/ios": "8.0.0",
+    "@nativescript/webpack": "~5.0.0-rc.6",
+    "typescript": "~4.0.0"
   },
   "gitHead": "20a65d338ae8f8911087ab6615b89363f864b07b",
   "readme": "NativeScript Application",
-  "main": "app.js"
+  "main": "./app/app.ts"
 }

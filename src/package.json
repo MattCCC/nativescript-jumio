@@ -45,9 +45,8 @@
 	"license": "Apache-2.0",
 	"homepage": "https://github.com/MattCCC/nativescript-jumio",
 	"devDependencies": {
-		"@nativescript/core": "^7.1.0",
-		"@nativescript/types": "^7.1.0",
-		"@nativescript/webpack": "^4.0.0",
+		"@nativescript/types": "~8.0.0",
+		"@nativescript/webpack": "~5.0.0-beta.0",
 		"@typescript-eslint/eslint-plugin": "^4.12.0",
 		"@typescript-eslint/eslint-plugin-tslint": "^4.12.0",
 		"@typescript-eslint/parser": "^4.12.0",
@@ -62,7 +61,8 @@
 	"bootstrapper": "nativescript-plugin-seed",
 	"dependencies": {
 		"@types/node": "14.14.22",
-		"ts-node": "^9.1.1"
+		"ts-node": "^9.1.1",
+		"@nativescript/core": "~8.0.0"
 	},
 	"engines": {
 		"node": ">=15"

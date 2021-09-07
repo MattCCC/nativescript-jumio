@@ -1,4 +1,4 @@
-import { ContentView } from 'tns-core-modules/ui/content-view';
+import { ContentView } from '@nativescript/core';
 export declare class Common extends ContentView {
     merchantApiToken: string;
     merchantApiSecret: string;

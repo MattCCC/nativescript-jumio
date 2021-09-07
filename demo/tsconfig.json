@@ -13,12 +13,6 @@
 			"es2017"
 		],
 		"baseUrl": ".",
-		"plugins": [
-			{
-				"transform": "@nativescript/webpack/transformers/ns-transform-native-classes",
-				"type": "raw"
-			}
-		],
 		"paths": {
 			"~/*": [
 				"app/*"
