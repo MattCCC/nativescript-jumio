@@ -771,7 +771,7 @@ declare class NetverifyUIController extends NSObject {
 
 interface NetverifyUIControllerDelegate extends NSObjectProtocol {
 
-	netverifyUIControllerDidCancelWithErrorScanReference(netverifyUIController: NetverifyUIController, error: NetverifyError, scanReference: string): void;
+	netverifyUIControllerDidCancelWithErrorScanReferenceAccountId(netverifyUIController: NetverifyUIController, error: NetverifyError, scanReference: string, accountId: string): void;
 
 	netverifyUIControllerDidCaptureAllParts(netverifyUIController: NetverifyUIController): void;
 
@@ -811,7 +811,7 @@ declare class NetverifyViewController extends JMNavigationController {
 
 interface NetverifyViewControllerDelegate extends NSObjectProtocol {
 
-	netverifyViewControllerDidCancelWithErrorScanReference(netverifyViewController: NetverifyViewController, error: NetverifyError, scanReference: string): void;
+	netverifyViewControllerDidCancelWithErrorScanReferenceAccountId(netverifyViewController: NetverifyViewController, error: NetverifyError, scanReference: string, accountId: string): void;
 
 	netverifyViewControllerDidFinishInitializingWithError?(netverifyViewController: NetverifyViewController, error: NetverifyError): void;
 

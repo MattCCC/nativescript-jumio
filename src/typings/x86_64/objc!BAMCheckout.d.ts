@@ -377,7 +377,7 @@ declare class BAMCheckoutViewController extends JMNavigationController {
 
 interface BAMCheckoutViewControllerDelegate extends NSObjectProtocol {
 
-	bamCheckoutViewControllerDidCancelWithErrorScanReference(controller: BAMCheckoutViewController, error: NSError, scanReference: string): void;
+	bamCheckoutViewControllerDidCancelWithErrorScanReferenceAccountId(controller: BAMCheckoutViewController, error: NSError, scanReference: string, accountId: string): void;
 
 	bamCheckoutViewControllerDidFinishScanWithCardInformationScanReference(controller: BAMCheckoutViewController, cardInformation: BAMCheckoutCardInformation, scanReference: string): void;
 

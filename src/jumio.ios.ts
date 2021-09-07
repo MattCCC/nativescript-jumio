@@ -154,7 +154,7 @@ class NsjumiopluginDelegateImpl extends NSObject implements NetverifyViewControl
         return delegate;
     }
 
-    netverifyViewControllerDidCancelWithErrorScanReference(netverifyViewController: NetverifyViewController, error: NetverifyError, scanReference: string): void {
+    netverifyViewControllerDidCancelWithErrorScanReferenceAccountId(netverifyViewController: NetverifyViewController, error: NetverifyError, scanReference: string, accountId: string): void {
         if (error) {
             Utils.error(error.code, error.message);
         }
