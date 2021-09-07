@@ -811,11 +811,11 @@ declare class NetverifyViewController extends JMNavigationController {
 
 interface NetverifyViewControllerDelegate extends NSObjectProtocol {
 
-	netverifyViewControllerDidCancelWithErrorScanReference(netverifyViewController: NetverifyViewController, error: NetverifyError, scanReference: string): void;
+	netverifyViewControllerDidCancelWithErrorScanReferenceAccountId(netverifyViewController: NetverifyViewController, error: NetverifyError, scanReference: string, accountId: string): void;
 
 	netverifyViewControllerDidFinishInitializingWithError?(netverifyViewController: NetverifyViewController, error: NetverifyError): void;
 
-	netverifyViewControllerDidFinishWithDocumentDataScanReference(netverifyViewController: NetverifyViewController, documentData: NetverifyDocumentData, scanReference: string): void;
+	netverifyViewControllerDidFinishWithDocumentDataScanReferenceAccountId(netverifyViewController: NetverifyViewController, documentData: NetverifyDocumentData, scanReference: string, accountId: string, authenticationResult: boolean): void;
 }
 declare var NetverifyViewControllerDelegate: {
 
