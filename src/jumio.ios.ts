@@ -182,7 +182,7 @@ class NsjumiopluginDelegateImpl extends NSObject implements NetverifyViewControl
         }
     }
 
-    netverifyViewControllerDidFinishWithDocumentDataScanReferenceAccountId(netverifyViewController: NetverifyViewController, documentData: NetverifyDocumentData, scanReference: string, accountId: string, authenticationResult: boolean): void {
+    netverifyViewControllerDidFinishWithDocumentDataScanReferenceAccountIdAuthenticationResult(netverifyViewController: NetverifyViewController, documentData: NetverifyDocumentData, scanReference: string, accountId: string, authenticationResult: boolean): void {
         Utils.log("Good with scan reference: %@", scanReference);
 
         const {
