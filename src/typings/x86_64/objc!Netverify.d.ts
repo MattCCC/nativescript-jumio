@@ -815,7 +815,7 @@ interface NetverifyViewControllerDelegate extends NSObjectProtocol {
 
 	netverifyViewControllerDidFinishInitializingWithError?(netverifyViewController: NetverifyViewController, error: NetverifyError): void;
 
-	netverifyViewControllerDidFinishWithDocumentDataScanReferenceAccountId(netverifyViewController: NetverifyViewController, documentData: NetverifyDocumentData, scanReference: string, accountId: string, authenticationResult: boolean): void;
+	netverifyViewControllerDidFinishWithDocumentDataScanReferenceAccountIdAuthenticationResult(netverifyViewController: NetverifyViewController, documentData: NetverifyDocumentData, scanReference: string, accountId: string, authenticationResult: boolean): void;
 }
 declare var NetverifyViewControllerDelegate: {
 
