@@ -22,6 +22,7 @@ export class Jumio extends Common {
 
     public init({
         customerId,
+        callbackUrl = null,
         preSelectedData = null,
         cancelWithError = null,
         finishInitWithError = null,
@@ -37,6 +38,10 @@ export class Jumio extends Common {
         config.apiToken = this.merchantApiToken;
         config.apiSecret = this.merchantApiSecret;
         config.dataCenter = this.mapDataCenter(this.datacenter);
+
+        if (callbackUrl) {
+            config.callbackUrl = callbackUrl;
+        }
 
         if (preSelectedData) {
             const { country, documentType } = preSelectedData;

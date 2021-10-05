@@ -14,9 +14,10 @@ export interface OnResultCallbacks<Error, DocumentData> {
 }
 
 export interface InitArgs<Error, DocumentData> extends OnResultCallbacks<Error, DocumentData> {
-  customerId: string;
-  preSelectedData: PreSelectedData;
   finishInitWithError: (error: Error) => void;
+  customerId: string;
+  callbackUrl?: string;
+  preSelectedData?: PreSelectedData;
 }
 
 export class Common extends ContentView {
