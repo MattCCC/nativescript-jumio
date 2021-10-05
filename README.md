@@ -53,6 +53,7 @@ try {
 
     jumio.init({
         customerId: 'customerId',
+        callbackUrl: 'Custom callback URL',
         preSelectedData: {
             country: 'Alpha2 Country Code',
             documentType: 'passport | identity_card | driver_license | visa',
@@ -80,6 +81,7 @@ try {
 | merchantApiSecret | string | yes |  | API secret |
 | datacenter | string | yes | | Data Center to use
 | customerId | string | yes | | Customer ID
+| callbackUrl | string | No | | Custom Callback URL
 | preSelectedData | Object | No | null | Pre-selected country as alpha2 code and document type
 | cancelWithError | funct |  |  | Callback triggered when User cancels. It accepts error object with code and message. |
 | finishInitWithError | funct |  |  | Callback triggered when initialization fails. It accepts error object with code and message. |

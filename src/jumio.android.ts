@@ -39,12 +39,17 @@ export class Jumio extends Common {
 
     public init({
         customerId,
+        callbackUrl = null,
         preSelectedData = null,
         cancelWithError = null,
         finishInitWithError = null,
         finishedScan = null
     }: InitArgs<JumioError, com.jumio.nv.NetverifyDocumentData>): void {
         this.netverifySDK.setCustomerInternalReference(customerId);
+
+        if (callbackUrl) {
+            this.netverifySDK.setCallbackUrl(callbackUrl);
+        }
 
         if (preSelectedData) {
             const { documentType, country } = preSelectedData;
