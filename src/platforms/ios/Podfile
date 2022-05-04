@@ -1,5 +1,5 @@
 use_frameworks! # Required for proper framework handling
-platform :ios, '10.0'
+platform :ios, '12.0'
 pod 'JumioMobileSDK', '~>3.9.4' # Use ID Verification, Authentication, Document Verification and BAM Checkout together in your app
 
 post_install do |installer|

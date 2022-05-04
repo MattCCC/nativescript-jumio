@@ -76,8 +76,14 @@ export class Jumio extends Common {
         }
     }
 
+    public destroy() {
+        //
+    }
+
     rootVC() {
-        const appWindow = UIApplication.sharedApplication.keyWindow;
+        const app = UIApplication.sharedApplication;
+        const appWindow = app.keyWindow ||
+            (app.windows && app.windows.count > 0 && app.windows.objectAtIndex(0));
 
         if (appWindow.rootViewController) {
             return appWindow.rootViewController;
@@ -90,13 +96,13 @@ export class Jumio extends Common {
             let viewController: UIViewController = topMostFrame.currentPage && topMostFrame.currentPage.ios;
 
             if (viewController) {
+                // Find top-most view controler
                 while (viewController.parentViewController) {
-                    // find top-most view controler
                     viewController = viewController.parentViewController;
                 }
 
+                // Find last presented modal
                 while (viewController.presentedViewController) {
-                    // find last presented modal
                     viewController = viewController.presentedViewController;
                 }
 
@@ -177,13 +183,13 @@ class NsjumiopluginDelegateImpl extends NSObject implements NetverifyViewControl
             Utils.error(error.code, error.message);
         }
 
-        if (this._owner.get().finishInitWithError) {
-            this._owner.get().finishInitWithError(error);
+        if (this._owner.get()?.finishInitWithError) {
+            this._owner.get()?.finishInitWithError(error);
         }
 
         if (error) {
             this._vc.dismissViewControllerAnimatedCompletion(true, null);
-            this._owner.get().netverifyViewController.destroy();
+            this._owner.get()?.netverifyViewController.destroy();
         }
     }
 
